@@ -41,21 +41,21 @@ function init() {
     setupControls();
     setupVisualizer();
     setupTheme();
-
-    // Load saved pattern if exists
-    loadPattern();
+    setupKeyboardShortcuts();
 }
 
 /**
  * Initialize grid data with default pattern
+ * Always creates a 32-step grid internally, but only displays STEPS
  */
 function initGrid() {
-    grid = Array(INSTRUMENTS.length).fill().map(() => Array(STEPS).fill(false));
+    const MAX_STEPS = 32; // Always maintain full 32-step pattern
+    grid = Array(INSTRUMENTS.length).fill().map(() => Array(MAX_STEPS).fill(false));
 
-    // Create a simple default beat
-    for (let i = 0; i < STEPS; i += 4) grid[0][i] = true; // Kick on 1, 5, 9, 13
-    for (let i = 4; i < STEPS; i += 8) grid[1][i] = true; // Snare on 5, 13
-    for (let i = 2; i < STEPS; i += 4) grid[2][i] = true; // Hi-Hat
+    // Create a simple default beat (only in first 16 steps)
+    for (let i = 0; i < 16; i += 4) grid[0][i] = true; // Kick on 1, 5, 9, 13
+    for (let i = 4; i < 16; i += 8) grid[1][i] = true; // Snare on 5, 13
+    for (let i = 2; i < 16; i += 4) grid[2][i] = true; // Hi-Hat
 }
 
 /**
@@ -142,8 +142,9 @@ function setupControls() {
                 togglePlayback(); // Stop playback
             }
 
+            // Just change the display/playback step count
+            // Grid always maintains full 32 steps internally
             STEPS = parseInt(e.target.value);
-            initGrid();
             setupGrid();
 
             if (wasPlaying) {
@@ -303,11 +304,56 @@ function randomizeGrid() {
 }
 
 /**
- * Save pattern to localStorage
+ * Simple encryption/decryption using base64 and character shifting
+ */
+function encryptData(data) {
+    const jsonStr = JSON.stringify(data);
+    // Simple encryption: base64 + character shift
+    const base64 = btoa(jsonStr);
+    const shifted = base64.split('').map(char =>
+        String.fromCharCode(char.charCodeAt(0) + 7)
+    ).join('');
+    return shifted;
+}
+
+function decryptData(encrypted) {
+    try {
+        // Reverse the character shift
+        const unshifted = encrypted.split('').map(char =>
+            String.fromCharCode(char.charCodeAt(0) - 7)
+        ).join('');
+        const jsonStr = atob(unshifted);
+        return JSON.parse(jsonStr);
+    } catch (e) {
+        console.error('Decryption failed:', e);
+        return null;
+    }
+}
+
+/**
+ * Save pattern as encrypted .beat file
  */
 function savePattern() {
-    const data = JSON.stringify({ grid, tempo });
-    localStorage.setItem('beatSequencerPattern', data);
+    const data = {
+        grid,
+        tempo,
+        steps: STEPS,
+        version: '1.0',
+        created: new Date().toISOString()
+    };
+
+    const encrypted = encryptData(data);
+
+    // Create blob and download
+    const blob = new Blob([encrypted], { type: 'application/octet-stream' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `beat-${Date.now()}.beat`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 
     // Visual feedback
     const saveBtn = document.getElementById('saveBtn');
@@ -322,22 +368,69 @@ function savePattern() {
 }
 
 /**
- * Load pattern from localStorage
+ * Load pattern from encrypted .beat file
  */
 function loadPattern() {
-    const data = localStorage.getItem('beatSequencerPattern');
-    if (data) {
-        const parsed = JSON.parse(data);
-        if (parsed.grid) {
-            grid = parsed.grid;
+    // Create file input
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.beat';
+
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const encrypted = event.target.result;
+            const data = decryptData(encrypted);
+
+            if (!data) {
+                alert('Failed to load pattern. File may be corrupted.');
+                return;
+            }
+
+            // Stop playback if playing
+            if (isPlaying) {
+                togglePlayback();
+            }
+
+            // Load pattern data
+            if (data.grid) {
+                grid = data.grid;
+            }
+            if (data.tempo) {
+                tempo = data.tempo;
+                document.getElementById('tempoSlider').value = tempo;
+                document.getElementById('tempoValue').textContent = tempo;
+            }
+            if (data.steps) {
+                STEPS = data.steps;
+                // Update step selector
+                const stepRadio = document.querySelector(`input[name="steps"][value="${STEPS}"]`);
+                if (stepRadio) {
+                    stepRadio.checked = true;
+                }
+            }
+
             setupGrid();
-        }
-        if (parsed.tempo) {
-            tempo = parsed.tempo;
-            document.getElementById('tempoSlider').value = tempo;
-            document.getElementById('tempoValue').textContent = tempo;
-        }
-    }
+
+            // Visual feedback
+            const loadBtn = document.getElementById('loadBtn');
+            const originalHTML = loadBtn.innerHTML;
+            loadBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            loadBtn.style.color = '#10b981';
+
+            setTimeout(() => {
+                loadBtn.innerHTML = originalHTML;
+                loadBtn.style.color = '';
+            }, 1500);
+        };
+
+        reader.readAsText(file);
+    };
+
+    input.click();
 }
 
 /**
@@ -408,6 +501,20 @@ function setupTheme() {
 
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
+    });
+}
+
+/**
+ * Setup keyboard shortcuts
+ */
+function setupKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
+        // Spacebar to play/stop
+        if (e.code === 'Space' || e.key === ' ') {
+            // Prevent page scroll
+            e.preventDefault();
+            togglePlayback();
+        }
     });
 }
 
