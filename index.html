@@ -170,9 +170,10 @@
                             <input type="radio" name="format" value="wav" checked>
                             <span>WAV (Uncompressed)</span>
                         </label>
-                        <label class="radio-label">
-                            <input type="radio" name="format" value="mp3">
+                        <label class="radio-label disabled">
+                            <input type="radio" name="format" value="mp3" disabled>
                             <span>MP3 (Compressed)</span>
+                            <span class="coming-soon-badge">Coming Soon</span>
                         </label>
                     </div>
                 </div>
@@ -188,28 +189,20 @@
                         <span class="estimate-value" id="durationEstimate">~5.0s</span>
                     </div>
                 </div>
-
-                <div class="form-group" id="mp3QualityGroup" style="display: none;">
-                    <label for="mp3Quality">MP3 Quality</label>
-                    <div class="input-with-display">
-                        <input type="range" id="mp3Quality" min="128" max="320" step="64" value="192"
-                            class="range-input">
-                        <span class="range-value" id="mp3QualityValue">192 kbps</span>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-secondary" id="modalCancel">Cancel</button>
-                <button class="btn-primary" id="modalExport">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>
-                    Export
-                </button>
             </div>
         </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" id="modalCancel">Cancel</button>
+            <button class="btn-primary" id="modalExport">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Export
+            </button>
+        </div>
+    </div>
     </div>
 
     <!-- Footer -->

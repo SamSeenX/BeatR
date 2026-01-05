@@ -54,9 +54,9 @@ function initGrid() {
     grid = Array(INSTRUMENTS.length).fill().map(() => Array(MAX_STEPS).fill(false));
 
     // Create a simple default beat (only in first 16 steps)
-    for (let i = 0; i < 16; i += 4) grid[0][i] = true; // Kick on 1, 5, 9, 13
-    for (let i = 4; i < 16; i += 8) grid[1][i] = true; // Snare on 5, 13
-    for (let i = 2; i < 16; i += 4) grid[2][i] = true; // Hi-Hat
+    for (let i = 0; i < 32; i += 4) grid[0][i] = true; // Kick on 1, 5, 9, 13
+    for (let i = 4; i < 32; i += 8) grid[1][i] = true; // Snare on 5, 13
+    for (let i = 2; i < 32; i += 4) grid[2][i] = true; // Hi-Hat
 }
 
 /**
