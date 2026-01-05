@@ -34,7 +34,35 @@
     <!-- Header -->
     <header class="header">
         <div class="logo">
-            <span class="logo-icon">🎵</span>
+            <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <!-- Grid pattern -->
+                <rect x="4" y="6" width="4" height="4" rx="1" fill="currentColor" opacity="0.3" />
+                <rect x="10" y="6" width="4" height="4" rx="1" fill="currentColor" />
+                <rect x="16" y="6" width="4" height="4" rx="1" fill="currentColor" opacity="0.3" />
+                <rect x="22" y="6" width="4" height="4" rx="1" fill="currentColor" />
+
+                <rect x="4" y="12" width="4" height="4" rx="1" fill="currentColor" />
+                <rect x="10" y="12" width="4" height="4" rx="1" fill="currentColor" opacity="0.3" />
+                <rect x="16" y="12" width="4" height="4" rx="1" fill="currentColor" />
+                <rect x="22" y="12" width="4" height="4" rx="1" fill="currentColor" opacity="0.3" />
+
+                <rect x="4" y="18" width="4" height="4" rx="1" fill="currentColor" opacity="0.3" />
+                <rect x="10" y="18" width="4" height="4" rx="1" fill="currentColor" />
+                <rect x="16" y="18" width="4" height="4" rx="1" fill="currentColor" opacity="0.3" />
+                <rect x="22" y="18" width="4" height="4" rx="1" fill="currentColor" />
+
+                <!-- Play button overlay -->
+                <circle cx="16" cy="24" r="4" fill="url(#gradient)" opacity="0.9" />
+                <path d="M15 22.5 L18 24 L15 25.5 Z" fill="white" />
+
+                <defs>
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#a855f7;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+            </svg>
             <span class="logo-text">Beat Sequencer</span>
         </div>
         <div class="theme-toggle" id="themeToggle">
