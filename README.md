@@ -24,7 +24,7 @@
 
 ### Online Demo
 
-Simply open `index.html` in a modern web browser. No build process or installation required!
+Visit [beatr.samseen.dev](https://beatr.samseen.dev/)
 
 ### Local Development
 
