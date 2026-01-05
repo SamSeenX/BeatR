@@ -137,6 +137,8 @@
 .radio-label.disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    padding-right: 7rem;
+    /* Make room for coming soon badge */
 }
 
 .radio-label.disabled input[type="radio"] {
