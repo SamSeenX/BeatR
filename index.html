@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beat Sequencer - Web Audio Drum Machine</title>
+    <title>Beatr - Web Audio Drum Machine</title>
     <meta name="description"
-        content="A powerful 16-step drum sequencer built with Web Audio API. Create beats in your browser with synthesized drum sounds.">
+        content="A powerful drum sequencer built with Web Audio API. Create beats in your browser with synthesized drum sounds.">
     <meta name="keywords" content="drum machine, beat sequencer, web audio, music production, synthesizer">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Beat Sequencer - Web Audio Drum Machine">
+    <meta property="og:title" content="Beatr - Web Audio Drum Machine">
     <meta property="og:description"
-        content="A powerful 16-step drum sequencer built with Web Audio API. Create beats in your browser.">
+        content="A powerful drum sequencer built with Web Audio API. Create beats in your browser.">
     <meta property="og:type" content="website">
 
     <!-- Fonts -->
@@ -37,37 +37,48 @@
     <!-- Header -->
     <header class="header">
         <div class="logo">
-            <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none"
+            <svg class="logo-icon" width="36" height="36" viewBox="0 0 36 36" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
-                <!-- Grid pattern -->
-                <rect x="4" y="6" width="4" height="4" rx="1" fill="currentColor" opacity="0.3" />
-                <rect x="10" y="6" width="4" height="4" rx="1" fill="currentColor" />
-                <rect x="16" y="6" width="4" height="4" rx="1" fill="currentColor" opacity="0.3" />
-                <rect x="22" y="6" width="4" height="4" rx="1" fill="currentColor" />
+                <!-- Background circle -->
+                <circle cx="18" cy="18" r="16" fill="url(#bgGradient)" opacity="0.1" />
 
-                <rect x="4" y="12" width="4" height="4" rx="1" fill="currentColor" />
-                <rect x="10" y="12" width="4" height="4" rx="1" fill="currentColor" opacity="0.3" />
-                <rect x="16" y="12" width="4" height="4" rx="1" fill="currentColor" />
-                <rect x="22" y="12" width="4" height="4" rx="1" fill="currentColor" opacity="0.3" />
+                <!-- Grid pattern (4x4 sequencer grid) -->
+                <rect x="8" y="8" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.4" />
+                <rect x="13" y="8" width="3" height="3" rx="0.5" fill="currentColor" />
+                <rect x="18" y="8" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.4" />
+                <rect x="23" y="8" width="3" height="3" rx="0.5" fill="currentColor" />
 
-                <rect x="4" y="18" width="4" height="4" rx="1" fill="currentColor" opacity="0.3" />
-                <rect x="10" y="18" width="4" height="4" rx="1" fill="currentColor" />
-                <rect x="16" y="18" width="4" height="4" rx="1" fill="currentColor" opacity="0.3" />
-                <rect x="22" y="18" width="4" height="4" rx="1" fill="currentColor" />
+                <rect x="8" y="13" width="3" height="3" rx="0.5" fill="currentColor" />
+                <rect x="13" y="13" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.4" />
+                <rect x="18" y="13" width="3" height="3" rx="0.5" fill="currentColor" />
+                <rect x="23" y="13" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.4" />
 
-                <!-- Play button overlay -->
-                <circle cx="16" cy="24" r="4" fill="url(#gradient)" opacity="0.9" />
-                <path d="M15 22.5 L18 24 L15 25.5 Z" fill="white" />
+                <rect x="8" y="18" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.4" />
+                <rect x="13" y="18" width="3" height="3" rx="0.5" fill="currentColor" />
+                <rect x="18" y="18" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.4" />
+                <rect x="23" y="18" width="3" height="3" rx="0.5" fill="currentColor" />
+
+                <rect x="8" y="23" width="3" height="3" rx="0.5" fill="currentColor" />
+                <rect x="13" y="23" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.4" />
+                <rect x="18" y="23" width="3" height="3" rx="0.5" fill="currentColor" />
+                <rect x="23" y="23" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.4" />
+
+                <!-- Accent glow -->
+                <circle cx="18" cy="18" r="14" stroke="url(#accentGradient)" stroke-width="0.5" opacity="0.3" />
 
                 <defs>
-                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#a855f7;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" style="stop-color:#a855f7;stop-opacity:1" />
                         <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
                     </linearGradient>
                 </defs>
             </svg>
             <div class="logo-text-container">
-                <span class="logo-text">Beat Sequencer</span>
+                <span class="logo-text">Beatr</span>
                 <span class="logo-by">by SamSeen</span>
             </div>
         </div>

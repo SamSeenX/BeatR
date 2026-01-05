@@ -1,12 +1,12 @@
-# Beat Sequencer - Web Audio Drum Machine
+# Beatr - Web Audio Drum Machine
 
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Platform](https://img.shields.io/badge/Platform-Web-blue)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
-> A powerful 16-step drum sequencer built with Web Audio API. Create beats in your browser with synthesized drum sounds - no samples required.
+> A powerful drum sequencer built with Web Audio API. Create beats in your browser with synthesized drum sounds - no samples required.
 
-**Beat Sequencer** is a modern, browser-based drum machine that uses the Web Audio API to synthesize drum sounds in real-time. With an intuitive grid interface and precise timing, you can create professional-sounding beats without any external audio files.
+**Beatr** is a modern, browser-based drum machine that uses the Web Audio API to synthesize drum sounds in real-time. With an intuitive grid interface and precise timing, you can create professional-sounding beats without any external audio files.
 
 ## ✨ Features
 
