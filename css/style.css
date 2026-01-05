@@ -122,6 +122,26 @@ body {
     color: var(--text-primary);
 }
 
+.logo-text-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.logo-text {
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.logo-by {
+    font-size: 0.625rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
 .theme-toggle {
     width: 44px;
     height: 44px;
