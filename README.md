@@ -6,7 +6,7 @@
 
 > A powerful drum sequencer built with Web Audio API. Create beats in your browser with synthesized drum sounds - no samples required.
 
-**Beatr** is a modern, browser-based drum machine that uses the Web Audio API to synthesize drum sounds in real-time. With an intuitive grid interface and precise timing, you can create professional-sounding beats without any external audio files.
+**BeatR** is a modern, browser-based drum machine that uses the Web Audio API to synthesize drum sounds in real-time. With an intuitive grid interface and precise timing, you can create professional-sounding beats without any external audio files.
 
 ## ✨ Features
 
@@ -202,3 +202,4 @@ If you find this project useful:
 ---
 
 Created with ❤️ by [SamSeen](https://samseen.dev)
+# beatr
