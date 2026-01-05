@@ -30,8 +30,8 @@ Simply open `index.html` in a modern web browser. No build process or installati
 
 ```bash
 # Clone the repository
-git clone https://github.com/SamSeenX/beat-sequencer.git
-cd beat-sequencer
+git clone https://github.com/SamSeenX/beatr.git
+cd beatr
 
 # Open in browser
 open index.html
@@ -79,7 +79,7 @@ python3 -m http.server 8000
 ## 🏗️ Project Structure
 
 ```
-beat-sequencer/
+beatr/
 ├── index.html          # Main application page
 ├── css/
 │   └── style.css       # Styles with theme support

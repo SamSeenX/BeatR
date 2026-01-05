@@ -1,5 +1,5 @@
 /**
- * Beat Sequencer Application
+ * Beatr Application
  * Main application logic and UI control
  */
 
