@@ -454,7 +454,7 @@ body {
 }
 
 .step {
-    aspect-ratio: 1;
+    height: 40px;
     border-radius: 8px;
     background: var(--step-inactive);
     border: 2px solid var(--border-color);
