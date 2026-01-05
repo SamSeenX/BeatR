@@ -123,8 +123,16 @@
                 <button class="btn-icon" id="loadBtn" title="Load">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                </button>
+                <div class="divider"></div>
+                <button class="btn-icon" id="exportBtn" title="Export Audio">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18V5l12-2v13"></path>
+                        <circle cx="6" cy="18" r="3"></circle>
+                        <circle cx="18" cy="16" r="3"></circle>
                     </svg>
                 </button>
             </div>
@@ -145,6 +153,59 @@
             </div>
         </div>
     </main>
+
+    <!-- Export Audio Modal -->
+    <div class="modal" id="exportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Export Audio</h2>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Format</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="format" value="wav" checked>
+                            <span>WAV (Uncompressed)</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="format" value="mp3">
+                            <span>MP3 (Compressed)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="loopCount">Loop Repeats</label>
+                    <div class="input-with-display">
+                        <input type="range" id="loopCount" min="1" max="16" value="4" class="range-input">
+                        <span class="range-value" id="loopCountValue">4</span>
+                    </div>
+                </div>
+
+                <div class="form-group" id="mp3QualityGroup" style="display: none;">
+                    <label for="mp3Quality">MP3 Quality</label>
+                    <div class="input-with-display">
+                        <input type="range" id="mp3Quality" min="128" max="320" step="64" value="192"
+                            class="range-input">
+                        <span class="range-value" id="mp3QualityValue">192 kbps</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="modalCancel">Cancel</button>
+                <button class="btn-primary" id="modalExport">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Export
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
