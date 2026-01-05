@@ -287,11 +287,31 @@ function clearGrid() {
 }
 
 /**
- * Randomize the grid
+ * Randomize the grid with looping patterns
+ * Creates a 4 or 8-step pattern and loops it to fill 32 steps
  */
 function randomizeGrid() {
-    grid = grid.map(row => row.map(() => Math.random() > 0.8));
+    // Choose pattern length (4 or 8 steps)
+    const patternLength = Math.random() > 0.5 ? 8 : 4;
 
+    // Generate pattern for each instrument
+    grid = grid.map(row => {
+        // Create base pattern
+        const pattern = [];
+        for (let i = 0; i < patternLength; i++) {
+            pattern.push(Math.random() > 0.7); // 30% chance of note
+        }
+
+        // Loop pattern to fill 32 steps
+        const fullPattern = [];
+        for (let i = 0; i < 32; i++) {
+            fullPattern.push(pattern[i % patternLength]);
+        }
+
+        return fullPattern;
+    });
+
+    // Update UI
     document.querySelectorAll('.step').forEach(step => {
         const row = parseInt(step.dataset.row);
         const col = parseInt(step.dataset.col);

@@ -31,6 +31,7 @@ function initExportModal() {
     // Open modal
     exportBtn.addEventListener('click', () => {
         exportModal.classList.add('active');
+        updateDurationEstimate(); // Recalculate with current STEPS
     });
 
     // Close modal
