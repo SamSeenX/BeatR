@@ -111,6 +111,7 @@
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.2s ease;
+    position: relative;
 }
 
 .radio-label:hover {
@@ -143,7 +144,10 @@
 }
 
 .coming-soon-badge {
-    margin-left: auto;
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
     padding: 0.25rem 0.5rem;
     background: var(--accent-primary);
     color: white;
