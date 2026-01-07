@@ -75,27 +75,41 @@
                 </defs>
             </svg>
             <div class="logo-text-container">
-                <span class="logo-text">Beatr</span>
+                <div class="logo-title-row">
+                    <span class="logo-text">Beatr</span>
+                    <span class="version-badge">V2</span>
+                </div>
                 <span class="logo-by">by SamSeen</span>
             </div>
         </div>
-        <div class="theme-toggle" id="themeToggle">
-            <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2">
-                <circle cx="12" cy="12" r="5"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-            </svg>
-            <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
+
+        <div class="header-right">
+            <a href="about.html" class="nav-link header-nav-link">About</a>
+            <a href="https://www.buymeacoffee.com/samseen" target="_blank" class="btn-bmc">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M20.216 6.415l-.132-.666c-.119-.596-.388-1.163-1.001-1.379-.197-.069-.42-.098-.57-.098-2.846 0-6.111.006-9.155.006-3.791 0-6.723-.016-8.625.016-.848.016-1.503.719-1.472 1.579.031.815.69 1.469 1.503 1.469.75 0 2.406-.016 3.328-.016.297 3.546.438 10.328 6.484 10.328 2.801 0 5.176-1.578 5.86-4.078.031.016.062.016.094.016 3.093 0 4.671-2.453 4.109-5.781zm-9.359 8.781c-2.453 0-2.828-4.141-2.828-6.109h5.61c0 1.953-.391 6.109-2.782 6.109zm6.187-2.609c-.203 1.594-1.109 2.5-2.75 2.5-.031 0-.063 0-.078-.016.484-1.359.703-3.156.703-4.906h1.656c.391 0 .546.906.469 2.422z" />
+                </svg>
+                Coffee
+            </a>
+            <div class="theme-toggle" id="themeToggle">
+                <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </div>
         </div>
     </header>
 
@@ -119,6 +133,14 @@
                     <span class="btn-text">PLAY</span>
                 </button>
 
+                <button class="btn btn-secondary" id="addTrackBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span class="btn-text">ADD</span>
+                </button>
+
                 <div class="step-selector">
                     <span class="selector-label">STEPS</span>
                     <div class="step-switch">
@@ -136,6 +158,12 @@
                     <span class="tempo-label">BPM</span>
                     <input type="range" id="tempoSlider" min="60" max="200" value="120" class="tempo-slider">
                     <span class="tempo-value" id="tempoValue">120</span>
+                </div>
+
+                <div class="swing-control">
+                    <span class="swing-label">SWING</span>
+                    <input type="range" id="swingSlider" min="0" max="100" value="0" class="swing-slider">
+                    <span class="swing-value" id="swingValue">0%</span>
                 </div>
             </div>
 
@@ -189,7 +217,7 @@
 
             <!-- Step Numbers -->
             <div class="step-numbers">
-                <div class="instrument-label"></div>
+                <div class="instrument-controls"></div>
                 <div class="numbers-row" id="stepNumbers">
                     <!-- Numbers will be generated by JavaScript -->
                 </div>
@@ -219,6 +247,14 @@
                         </label>
                     </div>
                 </div>
+                <div class="form-group" id="mp3QualityGroup" style="display: none;">
+                    <label>MP3 Bitrate</label>
+                    <div class="input-with-display">
+                        <input type="range" id="mp3Quality" min="128" max="320" value="192" step="32"
+                            class="range-input">
+                        <span class="range-value" id="mp3QualityValue">192 kbps</span>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <label for="loopCount">Loop Repeats</label>
@@ -242,6 +278,175 @@
                     </svg>
                     Export
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mixer Modal -->
+    <div class="modal" id="mixerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Mixer: <span id="mixerInstrumentName">KICK</span></h2>
+                <button class="modal-close" id="mixerClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="mixer-controls">
+                    <!-- EQ Knobs Row -->
+                    <div class="knobs-row">
+                        <!-- Low -->
+                        <div class="knob-group">
+                            <div class="rotary-knob" data-control="eqLow" data-min="-20" data-max="20" data-value="0">
+                                <div class="knob-body">
+                                    <div class="knob-indicator"></div>
+                                </div>
+                            </div>
+                            <span class="knob-label">Low</span>
+                            <span class="knob-value" id="valLow">0 dB</span>
+                        </div>
+                        <!-- Mid -->
+                        <div class="knob-group">
+                            <div class="rotary-knob" data-control="eqMid" data-min="-20" data-max="20" data-value="0">
+                                <div class="knob-body">
+                                    <div class="knob-indicator"></div>
+                                </div>
+                            </div>
+                            <span class="knob-label">Mid</span>
+                            <span class="knob-value" id="valMid">0 dB</span>
+                        </div>
+                        <!-- High -->
+                        <div class="knob-group">
+                            <div class="rotary-knob" data-control="eqHigh" data-min="-20" data-max="20" data-value="0">
+                                <div class="knob-body">
+                                    <div class="knob-indicator"></div>
+                                </div>
+                            </div>
+                            <span class="knob-label">High</span>
+                            <span class="knob-value" id="valHigh">0 dB</span>
+                        </div>
+                        <!-- Reverb -->
+                        <div class="knob-group">
+                            <div class="rotary-knob" data-control="reverbSend" data-min="0" data-max="1"
+                                data-step="0.05" data-value="0">
+                                <div class="knob-body">
+                                    <div class="knob-indicator"></div>
+                                </div>
+                            </div>
+                            <span class="knob-label">Reverb</span>
+                            <span class="knob-value" id="valReverb">0%</span>
+                        </div>
+                    </div>
+                    <!-- Pan and Level Row -->
+                    <div class="fader-row">
+                        <div class="mixer-knob-group">
+                            <label>Pan</label>
+                            <input type="range" class="mixer-slider" id="trackPan" min="-1" max="1" step="0.1"
+                                value="0">
+                            <span class="mixer-value" id="valPan">C</span>
+                        </div>
+                        <div class="mixer-knob-group">
+                            <label>Level</label>
+                            <input type="range" class="mixer-slider" id="trackGain" min="0" max="2" step="0.1"
+                                value="1">
+                            <span class="mixer-value" id="valGain">100%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="mixerReset">Reset Default</button>
+                <button class="btn-primary" id="mixerSave">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Instrument Modal -->
+    <div class="modal" id="addInstrumentModal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h2>Add Instrument</h2>
+                <button class="modal-close" id="addInstrumentClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="instrument-grid">
+                    <button class="instrument-option" data-instrument="KICK">
+                        <svg class="instrument-icon" viewBox="0 0 32 32" fill="none" stroke="var(--accent-primary)"
+                            stroke-width="1.5">
+                            <circle cx="16" cy="16" r="12" />
+                            <circle cx="16" cy="16" r="6" />
+                            <circle cx="16" cy="16" r="2" fill="var(--accent-primary)" />
+                        </svg>
+                        <span>Kick</span>
+                    </button>
+                    <button class="instrument-option" data-instrument="SNARE">
+                        <svg class="instrument-icon" viewBox="0 0 32 32" fill="none" stroke="var(--accent-primary)"
+                            stroke-width="1.5">
+                            <ellipse cx="16" cy="18" rx="12" ry="6" />
+                            <line x1="4" y1="12" x2="4" y2="18" />
+                            <line x1="28" y1="12" x2="28" y2="18" />
+                            <ellipse cx="16" cy="12" rx="12" ry="6" />
+                        </svg>
+                        <span>Snare</span>
+                    </button>
+                    <button class="instrument-option" data-instrument="HI-HAT">
+                        <svg class="instrument-icon" viewBox="0 0 32 32" fill="none" stroke="var(--accent-primary)"
+                            stroke-width="1.5">
+                            <ellipse cx="16" cy="10" rx="11" ry="4" />
+                            <ellipse cx="16" cy="14" rx="11" ry="4" />
+                            <line x1="16" y1="14" x2="16" y2="28" />
+                            <line x1="10" y1="28" x2="22" y2="28" />
+                        </svg>
+                        <span>Hi-Hat</span>
+                    </button>
+                    <button class="instrument-option" data-instrument="TOM">
+                        <svg class="instrument-icon" viewBox="0 0 32 32" fill="none" stroke="var(--accent-primary)"
+                            stroke-width="1.5">
+                            <ellipse cx="16" cy="22" rx="10" ry="5" />
+                            <line x1="6" y1="12" x2="6" y2="22" />
+                            <line x1="26" y1="12" x2="26" y2="22" />
+                            <ellipse cx="16" cy="12" rx="10" ry="5" />
+                        </svg>
+                        <span>Tom</span>
+                    </button>
+                    <button class="instrument-option" data-instrument="CLAP">
+                        <svg class="instrument-icon" viewBox="0 0 32 32" fill="none" stroke="var(--accent-primary)"
+                            stroke-width="1.5">
+                            <path d="M10 18 L16 12 L22 18" />
+                            <path d="M8 22 L16 14 L24 22" />
+                            <line x1="12" y1="8" x2="12" y2="4" />
+                            <line x1="16" y1="6" x2="16" y2="2" />
+                            <line x1="20" y1="8" x2="20" y2="4" />
+                        </svg>
+                        <span>Clap</span>
+                    </button>
+                    <button class="instrument-option" data-instrument="RIM">
+                        <svg class="instrument-icon" viewBox="0 0 32 32" fill="none" stroke="var(--accent-primary)"
+                            stroke-width="1.5">
+                            <circle cx="16" cy="16" r="10" />
+                            <line x1="16" y1="6" x2="16" y2="26" />
+                            <line x1="6" y1="16" x2="26" y2="16" />
+                        </svg>
+                        <span>Rim</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div class="modal" id="confirmDeleteModal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h2>Remove Track</h2>
+                <button class="modal-close" id="confirmDeleteClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    Are you sure you want to remove <strong id="deleteTrackName">KICK</strong>?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelDeleteBtn">Cancel</button>
+                <button class="btn-danger" id="confirmDeleteBtn">Remove</button>
             </div>
         </div>
     </div>

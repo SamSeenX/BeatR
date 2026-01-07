@@ -1,4 +1,4 @@
-# Beatr - Web Audio Drum Machine
+# Beatr V2 - Web Audio Drum Machine
 
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Platform](https://img.shields.io/badge/Platform-Web-blue)
@@ -8,15 +8,27 @@
 
 **BeatR** is a modern, browser-based drum machine that uses the Web Audio API to synthesize drum sounds in real-time. With an intuitive grid interface and precise timing, you can create professional-sounding beats without any external audio files.
 
+## 🎉 What's New in V2
+
+We've completely overhauled the audio engine and UI to bring you a professional-grade beat-making experience:
+
+- 🎛️ **Full Mixer Console** - Control volume, pan, 3-band EQ, and reverb for every single channel.
+- 💃 **Groove Control** - Break away from the rigid grid with adjustable swing parameters.
+- 📥 **WAV Export** - Record and export your beats directly to high-quality WAV files.
+- 🎨 **Visual Polish** - Enhanced UI with smoother animations, new V2 branding, and refined controls.
+
 ## ✨ Features
 
 - 🎵 **6 Synthesized Instruments** - Kick, Snare, Hi-Hat, Tom, Clap, and Rim Shot
 - 🎹 **16-Step Sequencer** - Classic drum machine grid interface
 - 🎨 **Modern Design** - Clean, responsive UI with dark/light theme support
+- 🎛️ **Full Mixer** - Volume, Pan, EQ, and Reverb per channel
+- 💃 **Swing/Groove** - Add human feel to your beats
 - 📊 **Audio Visualizer** - Real-time waveform visualization
 - ⚡ **Precise Timing** - Web Audio API scheduler for tight, accurate playback
 - 💾 **Pattern Storage** - Save and load your beats with localStorage
 - 🎲 **Pattern Generator** - Create random patterns for inspiration
+- 📥 **Audio Export** - Export your beats as WAV files
 - 🌐 **Zero Dependencies** - Pure vanilla JavaScript, no frameworks required
 - 📱 **Fully Responsive** - Works on desktop, tablet, and mobile
 
@@ -163,10 +175,10 @@ const STEPS = 32; // For a 32-step sequencer
 
 - [ ] Export patterns as MIDI files
 - [ ] Additional drum sounds (cowbell, conga, etc.)
-- [ ] Swing/groove control
-- [ ] Individual instrument volume controls
+- [x] Swing/groove control
+- [x] Individual instrument volume controls
 - [ ] Pattern chaining
-- [ ] Audio recording/export
+- [x] Audio recording/export
 - [ ] Keyboard shortcuts
 - [ ] Multiple pattern banks
 

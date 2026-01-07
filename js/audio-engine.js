@@ -3,18 +3,117 @@
  * Synthesizes drum sounds using Web Audio API without external samples
  */
 
+/**
+ * Channel Class
+ * Manages effects chain for a single instrument
+ */
+class Channel {
+    constructor(ctx, masterGain) {
+        this.ctx = ctx;
+        this.input = ctx.createGain();
+
+        // EQ Nodes (3-band)
+        this.lowShelf = ctx.createBiquadFilter();
+        this.lowShelf.type = 'lowshelf';
+        this.lowShelf.frequency.value = 320;
+
+        this.midPeaking = ctx.createBiquadFilter();
+        this.midPeaking.type = 'peaking';
+        this.midPeaking.frequency.value = 1000;
+        this.midPeaking.Q.value = 0.5;
+
+        this.highShelf = ctx.createBiquadFilter();
+        this.highShelf.type = 'highshelf';
+        this.highShelf.frequency.value = 3200;
+
+        // Volume Gain
+        this.outputGain = ctx.createGain();
+
+        // Pan
+        this.panner = ctx.createStereoPanner();
+        this.panner.pan.value = 0; // Center
+
+        // Reverb Send
+        this.reverbSend = ctx.createGain();
+        this.reverbSend.gain.value = 0; // Default dry
+
+        // Chain Connection: Input -> Low -> Mid -> High -> Pan -> Volume -> Master
+        this.input.connect(this.lowShelf);
+        this.lowShelf.connect(this.midPeaking);
+        this.midPeaking.connect(this.highShelf);
+        this.highShelf.connect(this.panner);
+        this.panner.connect(this.outputGain);
+        this.outputGain.connect(masterGain);
+
+        // Reverb Connection: Input -> ReverbSend -> ReverbInput (Global)
+        // This is done in the main engine since reverb is global
+    }
+
+    setEQ(bass, mid, treble) {
+        this.lowShelf.gain.value = bass; // dB
+        this.midPeaking.gain.value = mid; // dB
+        this.highShelf.gain.value = treble; // dB
+    }
+
+    setVolume(value) {
+        this.outputGain.gain.value = value;
+    }
+
+    setPan(value) {
+        this.panner.pan.value = value; // -1 (left) to 1 (right)
+    }
+
+    setReverbSend(amount) {
+        this.reverbSend.gain.value = amount;
+    }
+}
+
 class AudioEngine {
     constructor() {
         this.ctx = new (window.AudioContext || window.webkitAudioContext)();
         this.masterGain = this.ctx.createGain();
         this.masterGain.gain.value = 0.5;
-        
+
+        // Global Reverb - More pronounced
+        this.reverbNode = this.ctx.createConvolver();
+        this.reverbNode.buffer = this.createReverbImpulse(3.0, 3.0); // Longer, more decay
+        this.reverbGain = this.ctx.createGain();
+        this.reverbGain.gain.value = 1.5; // Boost wet signal
+
+        this.reverbNode.connect(this.reverbGain);
+        this.reverbGain.connect(this.masterGain);
+
+        // Initialize Channels
+        this.channels = {};
+        const instruments = ['KICK', 'SNARE', 'HI-HAT', 'TOM', 'CLAP', 'RIM'];
+        instruments.forEach(inst => {
+            const channel = new Channel(this.ctx, this.masterGain);
+            // Connect reverb send
+            channel.input.connect(channel.reverbSend);
+            channel.reverbSend.connect(this.reverbNode);
+            this.channels[inst] = channel;
+        });
+
         // Analyser for visualizer
         this.analyser = this.ctx.createAnalyser();
         this.analyser.fftSize = 2048;
-        
+
         this.masterGain.connect(this.analyser);
         this.analyser.connect(this.ctx.destination);
+    }
+
+    createReverbImpulse(duration, decay) {
+        const length = this.ctx.sampleRate * duration;
+        const impulse = this.ctx.createBuffer(2, length, this.ctx.sampleRate);
+        const left = impulse.getChannelData(0);
+        const right = impulse.getChannelData(1);
+        for (let i = 0; i < length; i++) {
+            // Simple noise with exponential decay
+            const n = i;
+            left[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay);
+            right[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay);
+        }
+        return impulse;
     }
 
     resume() {
@@ -29,16 +128,16 @@ class AudioEngine {
     playKick(time) {
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-        
+
         osc.frequency.setValueAtTime(150, time);
         osc.frequency.exponentialRampToValueAtTime(0.01, time + 0.5);
-        
+
         gain.gain.setValueAtTime(1, time);
         gain.gain.exponentialRampToValueAtTime(0.01, time + 0.5);
-        
+
         osc.connect(gain);
-        gain.connect(this.masterGain);
-        
+        gain.connect(this.channels['KICK'].input); // Connect to channel
+
         osc.start(time);
         osc.stop(time + 0.5);
     }
@@ -59,15 +158,15 @@ class AudioEngine {
         const noiseFilter = this.ctx.createBiquadFilter();
         noiseFilter.type = 'highpass';
         noiseFilter.frequency.value = 1000;
-        
+
         const noiseGain = this.ctx.createGain();
         noiseGain.gain.setValueAtTime(1, time);
         noiseGain.gain.exponentialRampToValueAtTime(0.01, time + 0.2);
 
         noise.connect(noiseFilter);
         noiseFilter.connect(noiseGain);
-        noiseGain.connect(this.masterGain);
-        
+        noiseGain.connect(this.channels['SNARE'].input);
+
         // Tone for body
         const osc = this.ctx.createOscillator();
         osc.type = 'triangle';
@@ -75,9 +174,9 @@ class AudioEngine {
         const oscGain = this.ctx.createGain();
         oscGain.gain.setValueAtTime(0.5, time);
         oscGain.gain.exponentialRampToValueAtTime(0.01, time + 0.1);
-        
+
         osc.connect(oscGain);
-        oscGain.connect(this.masterGain);
+        oscGain.connect(this.channels['SNARE'].input);
 
         noise.start(time);
         osc.start(time);
@@ -113,7 +212,7 @@ class AudioEngine {
         noise.connect(bandpass);
         bandpass.connect(highpass);
         highpass.connect(gain);
-        gain.connect(this.masterGain);
+        gain.connect(this.channels['HI-HAT'].input);
 
         noise.start(time);
     }
@@ -132,7 +231,7 @@ class AudioEngine {
         gain.gain.exponentialRampToValueAtTime(0.01, time + 0.4);
 
         osc.connect(gain);
-        gain.connect(this.masterGain);
+        gain.connect(this.channels['TOM'].input);
 
         osc.start(time);
         osc.stop(time + 0.4);
@@ -162,7 +261,7 @@ class AudioEngine {
 
         noise.connect(filter);
         filter.connect(gain);
-        gain.connect(this.masterGain);
+        gain.connect(this.channels['CLAP'].input);
 
         noise.start(time);
     }
@@ -185,7 +284,7 @@ class AudioEngine {
 
         osc.connect(filter);
         filter.connect(gain);
-        gain.connect(this.masterGain);
+        gain.connect(this.channels['RIM'].input);
 
         osc.start(time);
         osc.stop(time + 0.05);
@@ -195,7 +294,7 @@ class AudioEngine {
      * Play sound by instrument type
      */
     playSound(type, time) {
-        switch(type) {
+        switch (type) {
             case 'KICK': this.playKick(time); break;
             case 'SNARE': this.playSnare(time); break;
             case 'HI-HAT': this.playHiHat(time); break;

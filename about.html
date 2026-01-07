@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Beatr - The Free Web Audio Drum Machine</title>
+    <meta name="description"
+        content="Learn about Beatr, the free, open-source drum machine that runs in your browser. No samples required, built with the Web Audio API for pure synthesized percussion.">
+    <meta name="keywords"
+        content="drum machine about, beatr features, web audio api, synthesized drums, free beat maker">
+
+    <link rel="canonical" href="https://beatr.samseen.dev/about.html">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="About Beatr - Web Audio Drum Machine">
+    <meta property="og:description"
+        content="Discover how Beatr synthesizes drum sounds in your browser using the Web Audio API. No large downloads, just pure code.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://beatr.samseen.dev/about.html">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZTPVNCFXV4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-ZTPVNCFXV4');
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+
+<body>
+    <!-- Glow Effects -->
+    <div class="glow glow-top-left"></div>
+    <div class="glow glow-bottom-right"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="logo" style="text-decoration: none;">
+            <svg class="logo-icon" width="36" height="36" viewBox="0 0 36 36" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <!-- Main Gradient Container -->
+                <rect x="4" y="4" width="28" height="28" rx="8" fill="url(#logoGrad)" />
+                <!-- Dot Pattern -->
+                <circle cx="11" cy="11" r="2.5" fill="white" opacity="0.4" />
+                <circle cx="18" cy="11" r="2.5" fill="white" />
+                <circle cx="25" cy="11" r="2.5" fill="white" opacity="0.4" />
+
+                <circle cx="11" cy="18" r="2.5" fill="white" />
+                <!-- Center Play Triangle -->
+                <path d="M17 15.5L20.5 18L17 20.5V15.5Z" fill="white" />
+                <circle cx="25" cy="18" r="2.5" fill="white" />
+
+                <circle cx="11" cy="25" r="2.5" fill="white" opacity="0.4" />
+                <circle cx="18" cy="25" r="2.5" fill="white" />
+                <circle cx="25" cy="25" r="2.5" fill="white" opacity="0.4" />
+
+                <defs>
+                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <div class="logo-text-container">
+                <span class="logo-text">Beatr</span>
+                <span class="logo-by">by SamSeen</span>
+            </div>
+        </a>
+
+        <div class="header-right">
+            <a href="index.html" class="nav-link header-nav-link">Beat Maker</a>
+            <a href="https://www.buymeacoffee.com/samseen" target="_blank" class="btn-bmc">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M20.216 6.415l-.132-.666c-.119-.596-.388-1.163-1.001-1.379-.197-.069-.42-.098-.57-.098-2.846 0-6.111.006-9.155.006-3.791 0-6.723-.016-8.625.016-.848.016-1.503.719-1.472 1.579.031.815.69 1.469 1.503 1.469.75 0 2.406-.016 3.328-.016.297 3.546.438 10.328 6.484 10.328 2.801 0 5.176-1.578 5.86-4.078.031.016.062.016.094.016 3.093 0 4.671-2.453 4.109-5.781zm-9.359 8.781c-2.453 0-2.828-4.141-2.828-6.109h5.61c0 1.953-.391 6.109-2.782 6.109zm6.187-2.609c-.203 1.594-1.109 2.5-2.75 2.5-.031 0-.063 0-.078-.016.484-1.359.703-3.156.703-4.906h1.656c.391 0 .546.906.469 2.422z" />
+                </svg>
+                Coffee
+            </a>
+            <div class="theme-toggle" id="themeToggle">
+                <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container about-container">
+
+        <!-- Hero Section -->
+        <section class="about-hero">
+            <h1 class="hero-title">Create Beats <span class="text-gradient">Without Limits</span></h1>
+            <p class="hero-subtitle">
+                The web audio drum machine that doesn't need 500MB of samples to sound good.
+                Synthesis-powered, browser-based, and completely free.
+            </p>
+        </section>
+
+        <!-- Features Grid -->
+        <section class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" />
+                    </svg>
+                </div>
+                <h3>Web Audio API Power</h3>
+                <p>Pure synthesis generated in real-time by your browser. No compressed audio files, just mathematical
+                    waves designed to hit hard.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </div>
+                <h3>Export to WAV</h3>
+                <p>Create a loop you love? Export it immediately to a high-quality WAV file and drag it straight into
+                    your favorite DAW.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                        <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                        <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                    </svg>
+                </div>
+                <h3>No Samples Required</h3>
+                <p>Forget "missing sample" errors. Beatr generates every kick, snare, and hi-hat on the fly. It's
+                    lightweight and loads instantly.</p>
+            </div>
+        </section>
+
+        <!-- Copy Section -->
+        <section class="about-copy">
+            <h2 class="copy-title">The "Gigabyte Library" Problem</h2>
+            <h3 class="copy-subtitle text-gradient">And Why I Built Beatr</h3>
+
+            <div class="copy-content">
+                <p>
+                    If you're a music producer, you know the pain. You open a project from two years ago,
+                    and immediately get hit with <strong>"Missing Files: Kick_Deep_04.wav"</strong>.
+                    Or you want to sketch out a quick idea, but you have to wait for your DAW to load
+                    gigabytes of sample libraries first.
+                </p>
+
+                <p>
+                    Beatr is the answer to sample bloat. It's a <strong>synthesizer-first drum machine</strong>.
+                </p>
+
+                <p>
+                    I built this using the <strong>Web Audio API</strong> to prove that you can get
+                    professional-sounding
+                    drum transients directly from the browser. Using oscillators, noise buffers, and precise
+                    envelopes, Beatr sculpts sound in real-time.
+                </p>
+
+                <div class="highlight-box">
+                    <strong>Is it free?</strong>
+                    <p>Yes. Beatr is free, open-source, and has no hidden subscriptions.</p>
+                </div>
+
+                <p>
+                    Whether you're sketching a new lo-fi track, practicing your finger drumming, or just need
+                    a metronome that doesn't suck, Beatr is ready when you are.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="index.html">Beat Maker</a>
+            <a href="about.html">About</a>
+            <a href="https://github.com/SamSeenX/beatr">GitHub</a>
+        </div>
+        <p>Built with Web Audio API • No samples required</p>
+        <p>Made with ❤️ by <a href="https://samseen.dev" target="_blank">SamSeen</a></p>
+    </footer>
+
+    <script>
+        // Simple Theme Toggle Logic for About Page
+        const toggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        // Check local storage
+        if (localStorage.getItem('theme') === 'light') {
+            html.setAttribute('data-theme', 'light');
+        }
+
+        toggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+    </script>
+</body>
+
+</html>

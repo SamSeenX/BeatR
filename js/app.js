@@ -3,8 +3,8 @@
  * Main application logic and UI control
  */
 
-// Constants
-const INSTRUMENTS = ['KICK', 'SNARE', 'HI-HAT', 'TOM', 'CLAP', 'RIM'];
+// Constants (instruments is now dynamic)
+let INSTRUMENTS = ['KICK', 'SNARE', 'HI-HAT', 'TOM', 'CLAP', 'RIM'];
 let STEPS = 16; // Can be changed to 8, 16, or 32
 
 // State
@@ -13,6 +13,9 @@ let isPlaying = false;
 let currentStep = 0;
 let tempo = 120;
 let grid = [];
+let mutedInstruments = []; // Track muted state for each instrument
+let currentMixerInstrument = null; // Track which instrument is being mixed
+let swing = 0; // Swing amount (0-100)
 
 // Scheduler variables
 let nextNoteTime = 0;
@@ -43,6 +46,9 @@ function init() {
     setupTheme();
     setupKeyboardShortcuts();
     initExportModal();
+    initMixerModal();
+    initAddInstrumentModal();
+    initConfirmDeleteModal();
 }
 
 /**
@@ -52,6 +58,7 @@ function init() {
 function initGrid() {
     const MAX_STEPS = 32; // Always maintain full 32-step pattern
     grid = Array(INSTRUMENTS.length).fill().map(() => Array(MAX_STEPS).fill(false));
+    mutedInstruments = Array(INSTRUMENTS.length).fill(false);
 
     // New default beat pattern from image (loops every 16 steps)
     for (let i = 0; i < MAX_STEPS; i += 16) {
@@ -75,9 +82,7 @@ function initGrid() {
     }
 }
 
-/**
- * Setup the sequencer grid UI
- */
+// Setup the sequencer grid UI
 function setupGrid() {
     const gridContainer = document.getElementById('gridContainer');
     const stepNumbers = document.getElementById('stepNumbers');
@@ -91,11 +96,51 @@ function setupGrid() {
         const row = document.createElement('div');
         row.className = 'grid-row';
 
-        // Instrument label
+        // Instrument Controls (Label + Mute)
+        const controls = document.createElement('div');
+        controls.className = 'instrument-controls';
+
+        // Remove Track Button (only show if more than 1 track)
+        if (INSTRUMENTS.length > 1) {
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-btn';
+            removeBtn.title = 'Remove Track';
+            removeBtn.innerHTML = '−';
+            removeBtn.onclick = () => confirmRemoveTrack(rowIdx);
+            controls.appendChild(removeBtn);
+        }
+
+        // Mute Button
+        const muteBtn = document.createElement('button');
+        muteBtn.className = 'mute-btn';
+        if (mutedInstruments[rowIdx]) {
+            muteBtn.classList.add('muted');
+        }
+        muteBtn.title = 'Mute';
+        muteBtn.innerHTML = '<span>M</span>';
+        muteBtn.onclick = () => toggleMute(rowIdx);
+        controls.appendChild(muteBtn);
+
+        // Mixer Button (4 Knobs)
+        const mixerBtn = document.createElement('button');
+        mixerBtn.className = 'mixer-btn';
+        mixerBtn.title = 'Mixer Settings';
+        mixerBtn.innerHTML = `
+            <div class="mixer-knob-icon"></div>
+            <div class="mixer-knob-icon"></div>
+            <div class="mixer-knob-icon"></div>
+            <div class="mixer-knob-icon"></div>
+        `;
+        mixerBtn.onclick = () => openMixer(rowIdx);
+        controls.appendChild(mixerBtn);
+
+        // Label
         const label = document.createElement('div');
         label.className = 'instrument-label';
         label.textContent = instrument;
-        row.appendChild(label);
+        controls.appendChild(label);
+
+        row.appendChild(controls);
 
         // Steps container
         const stepsRow = document.createElement('div');
@@ -133,6 +178,14 @@ function setupGrid() {
 }
 
 /**
+ * Toggle mute for a track
+ */
+function toggleMute(rowIdx) {
+    mutedInstruments[rowIdx] = !mutedInstruments[rowIdx];
+    setupGrid(); // Re-render to update UI
+}
+
+/**
  * Toggle a step on/off
  */
 function toggleStep(row, col) {
@@ -140,6 +193,100 @@ function toggleStep(row, col) {
 
     const step = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
     step.classList.toggle('active');
+}
+
+/**
+ * Add a new track with the specified instrument
+ */
+function addTrack(instrument) {
+    // Add to instruments array
+    INSTRUMENTS.push(instrument);
+
+    // Add new row to grid
+    grid.push(new Array(32).fill(false));
+    mutedInstruments.push(false);
+
+    // Create audio channel if needed
+    if (!audioEngine.channels[instrument + '_' + (INSTRUMENTS.length - 1)]) {
+        // The audio engine will use the base instrument sound
+        // We track by index for multiple instances of same instrument
+    }
+
+    // Re-render grid
+    setupGrid();
+}
+
+/**
+ * Remove a track by index - shows confirmation modal
+ */
+let pendingDeleteIdx = null;
+
+function confirmRemoveTrack(rowIdx) {
+    if (INSTRUMENTS.length <= 1) return; // Keep at least one track
+
+    pendingDeleteIdx = rowIdx;
+    document.getElementById('deleteTrackName').textContent = INSTRUMENTS[rowIdx];
+    document.getElementById('confirmDeleteModal').classList.add('active');
+}
+
+function removeTrack(rowIdx) {
+    if (INSTRUMENTS.length <= 1) return;
+
+    // Remove from arrays
+    INSTRUMENTS.splice(rowIdx, 1);
+    grid.splice(rowIdx, 1);
+    mutedInstruments.splice(rowIdx, 1);
+
+    // Re-render grid
+    setupGrid();
+}
+
+function initConfirmDeleteModal() {
+    const modal = document.getElementById('confirmDeleteModal');
+    const closeBtn = document.getElementById('confirmDeleteClose');
+    const cancelBtn = document.getElementById('cancelDeleteBtn');
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+
+    closeBtn.onclick = () => modal.classList.remove('active');
+    cancelBtn.onclick = () => modal.classList.remove('active');
+
+    confirmBtn.onclick = () => {
+        if (pendingDeleteIdx !== null) {
+            removeTrack(pendingDeleteIdx);
+            pendingDeleteIdx = null;
+        }
+        modal.classList.remove('active');
+    };
+}
+
+/**
+ * Open the add instrument modal
+ */
+function openAddInstrumentModal() {
+    document.getElementById('addInstrumentModal').classList.add('active');
+}
+
+/**
+ * Initialize add instrument modal
+ */
+function initAddInstrumentModal() {
+    const modal = document.getElementById('addInstrumentModal');
+    const closeBtn = document.getElementById('addInstrumentClose');
+    const options = document.querySelectorAll('.instrument-option');
+    const addTrackBtn = document.getElementById('addTrackBtn');
+
+    // Open modal from toolbar button
+    addTrackBtn.onclick = () => modal.classList.add('active');
+
+    closeBtn.onclick = () => modal.classList.remove('active');
+
+    options.forEach(option => {
+        option.onclick = () => {
+            const instrument = option.dataset.instrument;
+            addTrack(instrument);
+            modal.classList.remove('active');
+        };
+    });
 }
 
 /**
@@ -176,6 +323,14 @@ function setupControls() {
     tempoSlider.addEventListener('input', (e) => {
         tempo = parseInt(e.target.value);
         tempoValue.textContent = tempo;
+    });
+
+    // Swing slider
+    const swingSlider = document.getElementById('swingSlider');
+    const swingValue = document.getElementById('swingValue');
+    swingSlider.addEventListener('input', (e) => {
+        swing = parseInt(e.target.value);
+        swingValue.textContent = swing + '%';
     });
 
     // Clear button
@@ -250,7 +405,7 @@ function scheduler() {
  */
 function scheduleNote(stepNumber, time) {
     grid.forEach((row, instrumentIndex) => {
-        if (row[stepNumber]) {
+        if (row[stepNumber] && !mutedInstruments[instrumentIndex]) {
             audioEngine.playSound(INSTRUMENTS[instrumentIndex], time);
         }
     });
@@ -261,7 +416,14 @@ function scheduleNote(stepNumber, time) {
  */
 function nextNote() {
     const secondsPerBeat = 60.0 / tempo;
-    nextNoteTime += 0.25 * secondsPerBeat; // 16th notes
+    const baseStep = 0.25 * secondsPerBeat; // 16th notes
+
+    // Apply swing to odd steps (1, 3, 5, etc = off-beats)
+    const isOffBeat = currentStepRef % 2 === 1;
+    const swingAmount = swing / 100; // 0 to 1
+    const swingDelay = isOffBeat ? (baseStep * swingAmount * 0.5) : 0;
+
+    nextNoteTime += baseStep + swingDelay;
     currentStepRef = (currentStepRef + 1) % STEPS;
     currentStep = currentStepRef;
     updateCurrentStep();
@@ -560,4 +722,262 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {
     init();
+}
+
+/**
+ * Initialize Mixer Modal
+ */
+function initMixerModal() {
+    const modal = document.getElementById('mixerModal');
+    const closeBtn = document.getElementById('mixerClose');
+    const resetBtn = document.getElementById('mixerReset');
+
+    // Close logic
+    closeBtn.onclick = () => {
+        modal.classList.remove('active');
+        currentMixerInstrument = null;
+    };
+
+    // Initialize Rotary Knobs
+    initRotaryKnobs();
+
+    // Pan Slider
+    const trackPanSlider = document.getElementById('trackPan');
+    trackPanSlider.oninput = (e) => {
+        if (currentMixerInstrument === null) return;
+        const val = parseFloat(e.target.value);
+        const channel = audioEngine.channels[INSTRUMENTS[currentMixerInstrument]];
+        channel.panner.pan.value = val;
+        // Display: L100 ... C ... R100
+        let display = 'C';
+        if (val < 0) display = 'L' + Math.round(Math.abs(val) * 100);
+        else if (val > 0) display = 'R' + Math.round(val * 100);
+        document.getElementById('valPan').textContent = display;
+    };
+
+    // Level Slider
+    const trackGainSlider = document.getElementById('trackGain');
+    trackGainSlider.oninput = (e) => {
+        if (currentMixerInstrument === null) return;
+        const val = parseFloat(e.target.value);
+        const channel = audioEngine.channels[INSTRUMENTS[currentMixerInstrument]];
+        channel.outputGain.gain.value = val;
+        document.getElementById('valGain').textContent = Math.round(val * 100) + '%';
+    };
+
+    // Reset Defaults
+    resetBtn.onclick = () => {
+        if (currentMixerInstrument === null) return;
+        const channel = audioEngine.channels[INSTRUMENTS[currentMixerInstrument]];
+
+        // Reset values
+        channel.lowShelf.gain.value = 0;
+        channel.midPeaking.gain.value = 0;
+        channel.highShelf.gain.value = 0;
+        channel.reverbSend.gain.value = 0;
+        channel.panner.pan.value = 0;
+        channel.outputGain.gain.value = 1;
+
+        // Refresh UI
+        openMixer(currentMixerInstrument);
+    };
+
+    // Save Settings
+    const saveBtn = document.getElementById('mixerSave');
+    saveBtn.onclick = () => {
+        const settings = {};
+        INSTRUMENTS.forEach(inst => {
+            const ch = audioEngine.channels[inst];
+            settings[inst] = {
+                eqLow: ch.lowShelf.gain.value,
+                eqMid: ch.midPeaking.gain.value,
+                eqHigh: ch.highShelf.gain.value,
+                reverb: ch.reverbSend.gain.value,
+                pan: ch.panner.pan.value,
+                gain: ch.outputGain.gain.value
+            };
+        });
+        localStorage.setItem('beatrMixerSettings', JSON.stringify(settings));
+
+        // Visual feedback then close
+        saveBtn.textContent = 'Saved!';
+        setTimeout(() => {
+            saveBtn.textContent = 'Save Settings';
+            modal.classList.remove('active');
+            currentMixerInstrument = null;
+        }, 800);
+    };
+}
+
+/**
+ * Initialize Rotary Knobs with drag interaction
+ */
+function initRotaryKnobs() {
+    const knobs = document.querySelectorAll('.rotary-knob');
+
+    knobs.forEach(knob => {
+        let isDragging = false;
+        let startY = 0;
+        let startValue = 0;
+
+        const min = parseFloat(knob.dataset.min);
+        const max = parseFloat(knob.dataset.max);
+        const step = parseFloat(knob.dataset.step) || 1;
+        const control = knob.dataset.control;
+        const knobBody = knob.querySelector('.knob-body');
+
+        // Helper: value to rotation angle (-135 to 135 degrees)
+        const valueToAngle = (val) => {
+            const range = max - min;
+            const normalized = (val - min) / range; // 0 to 1
+            return -135 + normalized * 270; // -135 to 135
+        };
+
+        // Helper: update knob rotation and value display
+        const updateKnob = (val) => {
+            const angle = valueToAngle(val);
+            const indicator = knob.querySelector('.knob-indicator');
+            indicator.style.transform = `rotate(${angle}deg)`;
+            knob.dataset.value = val;
+
+            // Update value display
+            let displayVal = val;
+            let suffix = '';
+            if (control.startsWith('eq')) {
+                suffix = ' dB';
+                displayVal = Math.round(val);
+            } else if (control === 'reverbSend') {
+                suffix = '%';
+                displayVal = Math.round(val * 100);
+            }
+
+            const valId = {
+                eqLow: 'valLow',
+                eqMid: 'valMid',
+                eqHigh: 'valHigh',
+                reverbSend: 'valReverb'
+            }[control];
+
+            document.getElementById(valId).textContent = displayVal + suffix;
+
+            // Apply to audio engine
+            if (currentMixerInstrument !== null) {
+                const channel = audioEngine.channels[INSTRUMENTS[currentMixerInstrument]];
+                if (control === 'eqLow') channel.lowShelf.gain.value = val;
+                if (control === 'eqMid') channel.midPeaking.gain.value = val;
+                if (control === 'eqHigh') channel.highShelf.gain.value = val;
+                if (control === 'reverbSend') channel.reverbSend.gain.value = val;
+            }
+        };
+
+        // Mouse/Touch Event Handlers
+        const onStart = (e) => {
+            isDragging = true;
+            startY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+            startValue = parseFloat(knob.dataset.value);
+            knob.style.cursor = 'grabbing';
+        };
+
+        const onMove = (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+
+            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+            const deltaY = startY - clientY;
+            const sensitivity = (max - min) / 100; // 100px for full range
+            let newValue = startValue + deltaY * sensitivity;
+
+            // Clamp to min/max
+            newValue = Math.max(min, Math.min(max, newValue));
+
+            // Snap to step
+            newValue = Math.round(newValue / step) * step;
+
+            updateKnob(newValue);
+        };
+
+        const onEnd = () => {
+            isDragging = false;
+            knob.style.cursor = 'grab';
+        };
+
+        // Attach event listeners
+        knob.addEventListener('mousedown', onStart);
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onEnd);
+
+        knob.addEventListener('touchstart', onStart, { passive: false });
+        document.addEventListener('touchmove', onMove, { passive: false });
+        document.addEventListener('touchend', onEnd);
+    });
+}
+
+/**
+ * Open Mixer for specific instrument
+ */
+function openMixer(rowIdx) {
+    currentMixerInstrument = rowIdx;
+    const instrumentName = INSTRUMENTS[rowIdx];
+    const channel = audioEngine.channels[instrumentName];
+    const modal = document.getElementById('mixerModal');
+
+    document.getElementById('mixerInstrumentName').textContent = instrumentName;
+
+    // Load current values into rotary knobs
+    const knobs = document.querySelectorAll('.rotary-knob');
+    knobs.forEach(knob => {
+        const control = knob.dataset.control;
+        const knobBody = knob.querySelector('.knob-body');
+        let val = 0;
+
+        if (control === 'eqLow') val = channel.lowShelf.gain.value;
+        if (control === 'eqMid') val = channel.midPeaking.gain.value;
+        if (control === 'eqHigh') val = channel.highShelf.gain.value;
+        if (control === 'reverbSend') val = channel.reverbSend.gain.value;
+
+        knob.dataset.value = val;
+
+        // Update rotation
+        const min = parseFloat(knob.dataset.min);
+        const max = parseFloat(knob.dataset.max);
+        const range = max - min;
+        const normalized = (val - min) / range;
+        const angle = -135 + normalized * 270;
+        const indicator = knob.querySelector('.knob-indicator');
+        indicator.style.transform = `rotate(${angle}deg)`;
+
+        // Update value text
+        let displayVal = val;
+        let suffix = '';
+        if (control.startsWith('eq')) {
+            suffix = ' dB';
+            displayVal = Math.round(val);
+        } else if (control === 'reverbSend') {
+            suffix = '%';
+            displayVal = Math.round(val * 100);
+        }
+
+        const valId = {
+            eqLow: 'valLow',
+            eqMid: 'valMid',
+            eqHigh: 'valHigh',
+            reverbSend: 'valReverb'
+        }[control];
+
+        document.getElementById(valId).textContent = displayVal + suffix;
+    });
+
+    // Load Pan slider
+    const panVal = channel.panner.pan.value;
+    document.getElementById('trackPan').value = panVal;
+    let panDisplay = 'C';
+    if (panVal < 0) panDisplay = 'L' + Math.round(Math.abs(panVal) * 100);
+    else if (panVal > 0) panDisplay = 'R' + Math.round(panVal * 100);
+    document.getElementById('valPan').textContent = panDisplay;
+
+    // Load Level slider
+    document.getElementById('trackGain').value = channel.outputGain.gain.value;
+    document.getElementById('valGain').textContent = Math.round(channel.outputGain.gain.value * 100) + '%';
+
+    modal.classList.add('active');
 }
