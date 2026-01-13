@@ -797,6 +797,16 @@ body {
     }
 }
 
+@media (max-width: 950px) {
+    .header {
+        justify-content: center;
+    }
+
+    .ad-banner-container {
+        order: 3;
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 0 1rem 3rem;
@@ -807,22 +817,11 @@ body {
         justify-content: center;
     }
 
-    /* When wrapped, each element takes full width and centers its content */
-    .header>.logo,
-    .header>.ad-banner-container,
-    .header>.header-right {
-        flex: 1 1 100%;
-        justify-content: center;
-        text-align: center;
-    }
-
     .ad-banner-container {
-        order: 2;
-        min-width: auto;
-    }
-
-    .header-right {
         order: 3;
+        width: 100%;
+        min-width: auto;
+        justify-content: center;
     }
 
     .sequencer {
@@ -1204,6 +1203,7 @@ body {
     display: flex;
     align-items: center;
     gap: 1rem;
+
 }
 
 .header-nav-link {
