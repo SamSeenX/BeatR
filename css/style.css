@@ -107,6 +107,7 @@ body {
     max-width: 1400px;
     margin: 0 auto;
     gap: 1rem;
+    flex-wrap: wrap;
 }
 
 /* Ad Banner Container */
@@ -803,6 +804,14 @@ body {
 
     .header {
         padding: 1rem;
+        justify-content: center;
+    }
+
+    .ad-banner-container {
+        order: 3;
+        width: 100%;
+        min-width: auto;
+        justify-content: center;
     }
 
     .sequencer {
@@ -860,6 +869,10 @@ body {
 }
 
 @media (max-width: 480px) {
+    .ad-banner-container {
+        display: none;
+    }
+
     .tempo-slider {
         width: 100px;
     }
